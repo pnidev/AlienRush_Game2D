@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5357d73a63cde4982d23965e8d70a5, type: 3}
+  m_Name: Level_map3_l0
+  m_EditorClassIdentifier: 
+  mapIndex: 3
+  levelIndex: 0
+  displayName: 'Map3 - L0: No Pick + Reach Score'
+  requiresBoss: 0
+  tasks:
+  - id: map3_l0_no_pick
+    type: 9
+    target: 0
+    note: "C\u1EA5m nh\u1EB7t b\u1EA5t k\u1EF3 item n\xE0o trong l\u01B0\u1EE3t"
+  - id: map3_l0_reach_score
+    type: 2
+    target: 100
+    note: "\u0110\u1EA1t \xEDt nh\u1EA5t 200 \u0111i\u1EC3m"

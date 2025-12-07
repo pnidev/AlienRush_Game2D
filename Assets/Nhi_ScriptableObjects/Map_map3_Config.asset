@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dde5d95bdedfe624d884dda208f61d5a, type: 3}
+  m_Name: Map_map3_Config
+  m_EditorClassIdentifier: 
+  mapIndex: 3
+  mapName: Map 3
+  levels:
+  - {fileID: 11400000, guid: 2c800876aeb008a4dbb1de40c50d6612, type: 2}
+  - {fileID: 11400000, guid: 0e0a12eece5576e4fb423c0bc16bc676, type: 2}
+  - {fileID: 11400000, guid: 4c6e22ab9fc545f4b9a59c3a00a75d5c, type: 2}
+  - {fileID: 11400000, guid: b1cd842a81b1df94180aac76a29df16e, type: 2}

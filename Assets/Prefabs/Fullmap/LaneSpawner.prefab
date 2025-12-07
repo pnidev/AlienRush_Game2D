@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3735437886949639888
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1128318826665297920}
+  m_Layer: 0
+  m_Name: SpawnRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1128318826665297920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3735437886949639888}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.6501749, y: 1.7383355, z: 0.021164058}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5391158126518180415}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7510485530216827373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5391158126518180415}
+  - component: {fileID: 2288840625000999967}
+  m_Layer: 0
+  m_Name: LaneSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5391158126518180415
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510485530216827373}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.2969201, y: -0.61, z: -0.02177152}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1128318826665297920}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2288840625000999967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510485530216827373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac58ed10945fbc442b29ba22b715915e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 4645410691601875212, guid: 61cb4392ed77ffd428bb9cf64bb94027, type: 3}
+  spawnInterval: 5
+  initialSpawnAhead: 10
+  despawnDistance: 30
+  laneYs:
+  - 2
+  - 0.1
+  hardObstacles:
+  - {fileID: 7721924559276280044, guid: 0a548b873de1daa4c86c15cafa636c1e, type: 3}
+  - {fileID: 2019416012575696040, guid: dc383f4ce0df9494a92b7149aa83e935, type: 3}
+  - {fileID: 8154638439645814163, guid: fd5c0ce739b778042a05a5a3405570ec, type: 3}
+  - {fileID: 3282826457016250592, guid: 780591058f8584c4a834974531281ee2, type: 3}
+  softObstacles:
+  - {fileID: 429593843204831464, guid: 011e6d63e62046a48b2a2f3fc6f4a996, type: 3}
+  - {fileID: 374220803016717324, guid: e2c4695d1f6a0b2489567f6625142ce3, type: 3}
+  prefabBanhMi: {fileID: 7167561788795634562, guid: 347f4f1cb54d2ec4bbed193125f5d13e, type: 3}
+  prefabCafe: {fileID: 5870011663689767701, guid: 2ca9f5a34c7ac9e4b92d280aa019e365, type: 3}
+  prefabMagnet: {fileID: 2836568054002464093, guid: c4f5f519fbf97034a8e51865bedddbea, type: 3}
+  prefabBoost: {fileID: 1547644872194003243, guid: 087e46738d008c047a24f384b2009ed3, type: 3}
+  prefabMystery: {fileID: 8327877900559848615, guid: 914ffbb00d55b25449fd079e84b9b2df, type: 3}
+  prefabThuocLao: {fileID: 4583602688166164638, guid: 7f47207e1d91fcc4486069f413f24e87, type: 3}
+  emptyRatio: 0.2
+  obstacleRatio: 0.55
+  itemRatio: 0.25
+  hardObstacleRatio: 0.7
+  maxObstaclesPerRow: 2
+  usePooling: 1
+  spawnRoot: {fileID: 1128318826665297920}
+  initialPoolPerPrefab: 5

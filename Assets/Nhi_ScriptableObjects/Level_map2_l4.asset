@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5357d73a63cde4982d23965e8d70a5, type: 3}
+  m_Name: Level_map2_l4
+  m_EditorClassIdentifier: 
+  mapIndex: 2
+  levelIndex: 4
+  displayName: 'Map2 - L4: Boss Timed'
+  requiresBoss: 1
+  tasks:
+  - id: map2_l4_kill_boss_timed
+    type: 5
+    target: 1
+    note: "\u0110\xE1nh boss "
