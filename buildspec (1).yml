@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing dependencies...
+      - npm install
+  build:
+    commands:
+      - echo Building backend...
+      - npm run build
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: yes
