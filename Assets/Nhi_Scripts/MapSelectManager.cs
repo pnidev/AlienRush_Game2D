@@ -1,14 +1,7 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 
-/// <summary>
-/// MapSelectManager - quản lý màn chọn map
-/// - Hiển thị unlock, tổng điểm
-/// - TỰ ĐỘNG NHẢY THẲNG VÀO BOSS nếu đã hoàn thành hết level thường của map đó
-/// </summary>
 public class MapSelectManager : MonoBehaviour
 {
     [Header("Buttons")]
@@ -16,34 +9,12 @@ public class MapSelectManager : MonoBehaviour
     public Button map2Btn;
     public Button map3Btn;
 
-    [Header("Totals UI (optional)")]
-    public TextMeshProUGUI globalTotalText;
-    public TextMeshProUGUI map1TotalText;
-    public TextMeshProUGUI map2TotalText;
-    public TextMeshProUGUI map3TotalText;
+    [Header("Lock PNG Images (map 2 & 3 only)")]
+    public GameObject map2InfoImage;
+    public GameObject map3InfoImage;
 
     [Header("Config")]
-    public int maxMapCount = 3;
-    // Số level mỗi map: index 0 = Map1, index 1 = Map2, ...
-    // Ví dụ: Map1 có 6 level (0-4 normal + level 5 là boss)
     public int[] levelsPerMap = new int[] { 6, 5, 4 };
-
-    private void Reset()
-    {
-        maxMapCount = 3;
-        levelsPerMap = new int[] { 6, 5, 4 };
-    }
-
-    private void OnEnable()
-    {
-        SetupButtonListeners();
-        Refresh();
-    }
-
-    private void OnDisable()
-    {
-        RemoveButtonListeners();
-    }
 
     private void Start()
     {
@@ -51,110 +22,118 @@ public class MapSelectManager : MonoBehaviour
         Refresh();
     }
 
-    private void SetupButtonListeners()
+    void SetupButtonListeners()
     {
-        if (map1Btn != null)
-        {
-            map1Btn.onClick.RemoveAllListeners();
-            map1Btn.onClick.AddListener(() => OnMapClicked(1));
-        }
-        if (map2Btn != null)
-        {
-            map2Btn.onClick.RemoveAllListeners();
-            map2Btn.onClick.AddListener(() => OnMapClicked(2));
-        }
-        if (map3Btn != null)
-        {
-            map3Btn.onClick.RemoveAllListeners();
-            map3Btn.onClick.AddListener(() => OnMapClicked(3));
-        }
+        map1Btn.onClick.RemoveAllListeners();
+        map1Btn.onClick.AddListener(() => OnMapClicked(1));
+
+        map2Btn.onClick.RemoveAllListeners();
+        map2Btn.onClick.AddListener(() => OnMapClicked(2));
+
+        map3Btn.onClick.RemoveAllListeners();
+        map3Btn.onClick.AddListener(() => OnMapClicked(3));
     }
 
-    private void RemoveButtonListeners()
-    {
-        if (map1Btn != null) map1Btn.onClick.RemoveAllListeners();
-        if (map2Btn != null) map2Btn.onClick.RemoveAllListeners();
-        if (map3Btn != null) map3Btn.onClick.RemoveAllListeners();
-    }
-
+    // =========================================
+    // REFRESH UI (Quan trọng)
+    // =========================================
     public void Refresh()
     {
-        if (map1Btn != null) map1Btn.interactable = GameSave.IsMapUnlocked(1);
-        if (map2Btn != null) map2Btn.interactable = GameSave.IsMapUnlocked(2);
-        if (map3Btn != null) map3Btn.interactable = GameSave.IsMapUnlocked(3);
+        // MAP 1: luôn mở → chỉ hiện nút
+        map1Btn.gameObject.SetActive(true);
 
-        if (globalTotalText != null)
-            globalTotalText.text = $"All Maps BestTotal: {GameSave.GetGlobalScore(maxMapCount)}\nAll Maps RunTotal: {GameSave.GetGlobalRunTotal()}";
+        // MAP 2
+        bool unlocked2 = GameSave.IsMapUnlocked(2);
+        map2Btn.gameObject.SetActive(unlocked2);
+        if (map2InfoImage != null)
+            map2InfoImage.SetActive(!unlocked2);
 
-        if (map1TotalText != null) map1TotalText.text = $"Map 1 - BestTotal: {GameSave.GetMapScore(1)}\nRunTotal: {GameSave.GetMapRunTotal(1)}";
-        if (map2TotalText != null) map2TotalText.text = $"Map 2 - BestTotal: {GameSave.GetMapScore(2)}\nRunTotal: {GameSave.GetMapRunTotal(2)}";
-        if (map3TotalText != null) map3TotalText.text = $"Map 3 - BestTotal: {GameSave.GetMapScore(3)}\nRunTotal: {GameSave.GetMapRunTotal(3)}";
+        // MAP 3
+        bool unlocked3 = GameSave.IsMapUnlocked(3);
+        map3Btn.gameObject.SetActive(unlocked3);
+        if (map3InfoImage != null)
+            map3InfoImage.SetActive(!unlocked3);
     }
 
-    /// <summary>
-    /// Xử lý khi bấm chọn map
-    /// → Nếu đã hoàn thành hết level thường → load thẳng boss scene
-    /// → Nếu chưa → vào MapXScene bình thường
-    /// </summary>
+    // =========================================
+    // CLICK MAP
+    // =========================================
     private void OnMapClicked(int mapIndex)
     {
         if (!GameSave.IsMapUnlocked(mapIndex))
         {
-            Debug.Log($"[MapSelect] Map {mapIndex} is locked.");
+            Debug.Log($"Map {mapIndex} đang khóa.");
             return;
         }
 
-        int levelCount = levelsPerMap[mapIndex - 1]; // Map1 → index 0
-        int normalLevelCount = levelCount - 1; // level cuối là boss
+        // LẤY INDEX LEVEL CUỐI CÙNG CHUẨN THEO CONFIG
+        int finalLevelIndex = LevelConstants.GetFinalLevelIndexForMap(mapIndex);
+        if (finalLevelIndex < 0)
+        {
+            Debug.LogError($"[MapSelect] finalLevelIndex < 0 cho map {mapIndex}. Kiểm tra LevelConstants.");
+            return;
+        }
 
-        // Kiểm tra xem đã hoàn thành hết level thường chưa
-        bool allNormalLevelsCompleted = true;
-        for (int i = 0; i < normalLevelCount; i++)
+        // CÁC LEVEL TRƯỚC BOSS: 0 .. finalLevelIndex - 1
+        bool allPreBossCompleted = true;
+        for (int i = 0; i < finalLevelIndex; i++)
         {
             if (!GameSave.IsLevelCompleted(mapIndex, i))
             {
-                allNormalLevelsCompleted = false;
+                allPreBossCompleted = false;
                 break;
             }
         }
 
-        // ĐÃ HOÀN THÀNH HẾT LEVEL THƯỜNG → NHẢY THẲNG VÀO BOSS
-        if (allNormalLevelsCompleted)
+        // LEVEL CHỨA BOSS: finalLevelIndex
+        bool bossBeaten = GameSave.IsLevelCompleted(mapIndex, finalLevelIndex);
+
+        // === ONLY ONCE: nếu đã qua hết level trước boss, NHƯNG level cuối (có boss) CHƯA DONE → cho vào boss
+        if (allPreBossCompleted && !bossBeaten)
         {
-            string bossSceneName = $"FightingBoss{mapIndex}"; // tên scene boss theo chuẩn của bạn
-            Debug.Log($"[MapSelect] Map {mapIndex} đã hoàn thành hết level thường → NHẢY THẲNG VÀO BOSS: {bossSceneName}");
-            SceneManager.LoadScene(bossSceneName);
-            return; // quan trọng: thoát luôn, không chạy xuống dưới
+            string bossScene = "";
+            switch (mapIndex)
+            {
+                case 1: bossScene = "boss_1_officeq"; break;
+                case 2: bossScene = "FightingBoss2"; break;
+                case 3: bossScene = "FightingBoss3"; break;
+            }
+
+            if (!string.IsNullOrEmpty(bossScene))
+            {
+                Debug.Log($"[MapSelect] Load boss scene cho map {mapIndex}: {bossScene}");
+                SceneManager.LoadScene(bossScene);
+            }
+            else
+            {
+                Debug.LogError($"[MapSelect] Chưa cấu hình bossScene cho mapIndex = {mapIndex}");
+            }
+            return;
         }
 
-        // CHƯA HOÀN THÀNH → vào map bình thường như cũ
+        // Còn lại: vào gameplay map (run bình thường)
         GameSave.SetLastPlayed(mapIndex, 0);
-        Debug.Log($"[MapSelect] Chọn Map {mapIndex} → vào Map{mapIndex}Scene (còn level chưa làm)");
-        SceneManager.LoadScene($"Map{mapIndex}Scene");
+        string mapSceneName = $"Map{mapIndex}Scene";
+        Debug.Log($"[MapSelect] Load map scene cho map {mapIndex}: {mapSceneName}");
+        SceneManager.LoadScene(mapSceneName);
     }
-
-    // Optional: nếu bạn muốn sau khi đánh boss xong thì không cho vào boss nữa (tùy chọn)
-    // Thêm vào OnMapClicked trước khi load boss:
-    // if (GameSave.IsBossDefeated(mapIndex)) { ... show "Completed" ... return; }
-
-    public int RecomputeMapTotalFromBests(int mapIndex, int levelsCount)
+    // =========================================
+    // NÚT RESET PROGRESS
+    // =========================================
+    public void OnResetAllLevelsButtonClicked()
     {
-        int sum = 0;
-        for (int i = 0; i < levelsCount; i++)
-            sum += GameSave.GetLevelBest(mapIndex, i);
-        return sum;
-    }
+        // 1) Reset tiến trình tất cả level/task
+        GameSave.ResetAllLevelProgress(3); // nếu bạn có hơn 3 map thì tăng số này
 
-    public void RefreshFromExternal() => Refresh();
+        // 2) Refresh lại UI khóa/mở map
+        Refresh();
 
-    // Nút Back về MapSelect từ trong game
-    public void OnBackToMapSelectClicked()
-    {
-        Nhi_ScoreManager.I?.CommitRunScore();
-
-        if (LevelRuntimeManager.I != null)
-            LevelRuntimeManager.I.EndCurrentRun(false); // không force complete
-
+        // 3) (Tùy chọn) Load lại chính MapSelectScene cho sạch state
+        // Nếu scene của bạn tên khác thì sửa lại cho đúng
         SceneManager.LoadScene("MapSelectScene");
+
+        Debug.Log("[MapSelect] Đã reset toàn bộ tiến trình level và reload MapSelectScene.");
     }
+
+
 }

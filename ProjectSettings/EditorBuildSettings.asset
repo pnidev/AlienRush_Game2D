@@ -5,12 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Settings/Scenes/URP2DSceneTemplate.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Nhi_Scenes/FightingBoss1.unity
     guid: 140d1c3e6b875234f9015db464fe345f
+  - enabled: 1
+    path: Assets/Scenes/MainHome.unity
+    guid: b13c968359ea80a4eb4910104e765d68
   - enabled: 1
     path: Assets/Scenes/Map1Scene.unity
     guid: cc521f0e026c6504aacbdc8a38d7c9d0
@@ -23,4 +26,34 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Nhi_Scenes/MapSelectScene.unity
     guid: 154953e83f2b1594caadf24b243645f1
+  - enabled: 1
+    path: Assets/Nhi_Scenes/boss_1_officeq.unity
+    guid: 9a88dc7a354ee824c9300e82817fddbe
+  - enabled: 1
+    path: Assets/Nhi_Scenes/FightingBoss2.unity
+    guid: 69c01d810b85dac44bf3e207df815aaf
+  - enabled: 1
+    path: Assets/Nhi_Scenes/FightingBoss3.unity
+    guid: b290bbcaf97123b46b7fe087ab18600c
+  - enabled: 1
+    path: Assets/Scenes/Guideline.unity
+    guid: 1129cd2f7865edc43b273f7891f1524f
+  - enabled: 1
+    path: Assets/Scenes/Leaderboard.unity
+    guid: 6f1ce77886633aa45809e42f96e96263
+  - enabled: 1
+    path: Assets/Scenes/Loading.unity
+    guid: f0c42d505608c4647bccc6fea1c204ea
+  - enabled: 1
+    path: Assets/Scenes/Scene1.unity
+    guid: 35a438e1ae685cd42bf461597fe85d82
+  - enabled: 1
+    path: Assets/Scenes/Scene2.unity
+    guid: 1316dacc36ccda346ad2bf68e9b0d4dc
+  - enabled: 1
+    path: Assets/Scenes/Start.unity
+    guid: 7c95eeec5cc49ad4a81cef45f36a2f08
+  - enabled: 1
+    path: Assets/Scenes/Setting.unity
+    guid: 7b4fce3abe30ef441a3d0e4acc332233
   m_configObjects: {}

@@ -223,5 +223,34 @@ public static class GameSave
         PlayerPrefs.SetInt($"BestScore_Map{mapIndex}", score);
         PlayerPrefs.Save();
     }
+    /// <summary>
+    /// Reset toàn bộ tiến trình level (done flag + best score + tổng map score)
+    /// KHÔNG reset tiền, run total, v.v.
+    /// </summary>
+    public static void ResetAllLevelProgress(int maxMapInclusive = 3)
+    {
+        for (int map = 1; map <= maxMapInclusive; map++)
+        {
+            int finalLevelIndex = LevelConstants.GetFinalLevelIndexForMap(map);
+            if (finalLevelIndex < 0) continue;
+
+            // Xóa cờ done + best score từng level
+            for (int level = 0; level <= finalLevelIndex; level++)
+            {
+                PlayerPrefs.DeleteKey(LevelDoneKey(map, level));
+                PlayerPrefs.DeleteKey(LevelBestKey(map, level));
+            }
+
+            // Xóa cache tổng điểm map
+            PlayerPrefs.DeleteKey(MapScoreKey(map));
+        }
+
+        // Xóa LastPlayed (cho an toàn, để lần sau vào map sẽ từ level 0)
+        PlayerPrefs.DeleteKey(LastPlayedKey);
+
+        PlayerPrefs.Save();
+        Debug.Log("[Save] ResetAllLevelProgress: xóa done + best + mapScore cho tất cả map.");
+    }
+
 
 }

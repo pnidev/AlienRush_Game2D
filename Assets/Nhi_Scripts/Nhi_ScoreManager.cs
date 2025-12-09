@@ -54,8 +54,23 @@ public class Nhi_ScoreManager : MonoBehaviour
     /// </summary>
     public void CommitRunScore()
     {
+        //    int intScore = CurrentRunScore;
+
+        //    int oldBest = GameSave.GetBestScoreForMap(currentMap);
+
+        //    if (intScore > oldBest)
+        //    {
+        //        Debug.Log($"[ScoreManager] NEW HIGH SCORE Map {currentMap}: {intScore}");
+        //        GameSave.SetBestScoreForMap(currentMap, intScore);
+        //    }
+        //    else
+        //    {
+        //        Debug.Log($"[ScoreManager] Run score = {intScore}, best = {oldBest} (not updated)");
+        //    }
+        //}
         int intScore = CurrentRunScore;
 
+        // Cập nhật best-per-map (behavior hiện có)
         int oldBest = GameSave.GetBestScoreForMap(currentMap);
 
         if (intScore > oldBest)
@@ -67,5 +82,27 @@ public class Nhi_ScoreManager : MonoBehaviour
         {
             Debug.Log($"[ScoreManager] Run score = {intScore}, best = {oldBest} (not updated)");
         }
+
+        // --- NEW: save per-user best score for this map (for local leaderboard) ---
+        string username = PlayerPrefs.GetString("CurrentUsername", "");
+        if (!string.IsNullOrEmpty(username))
+        {
+            string userKey = $"Score_Map{currentMap}_{username}"; // e.g. Score_Map1_Duc
+            int prevUserBest = PlayerPrefs.GetInt(userKey, 0);
+            if (intScore > prevUserBest)
+            {
+                PlayerPrefs.SetInt(userKey, intScore);
+                PlayerPrefs.Save();
+                Debug.Log($"[ScoreManager] Updated user best: {userKey} = {intScore}");
+            }
+            else
+            {
+                Debug.Log($"[ScoreManager] User best unchanged: {userKey} = {prevUserBest}");
+            }
+        }
+        else
+        {
+            Debug.Log("[ScoreManager] CommitRunScore: no CurrentUsername set, per-user save skipped.");
+        }
     }
-}
+    }

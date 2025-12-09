@@ -16,7 +16,7 @@ MonoBehaviour:
   levelIndex: 5
   displayName: 'Map1 - L5: Boss'
   requiresBoss: 1
-  bossSceneName: bossfighting1
+  bossSceneName: boss1_officeq
   tasks:
   - id: map1_l5_kill_boss
     type: 5

@@ -16,6 +16,7 @@ MonoBehaviour:
   levelIndex: 0
   displayName: 'Map3 - L0: No Pick + Reach Score'
   requiresBoss: 0
+  bossSceneName: 
   tasks:
   - id: map3_l0_no_pick
     type: 9
@@ -24,4 +25,4 @@ MonoBehaviour:
   - id: map3_l0_reach_score
     type: 2
     target: 100
-    note: "\u0110\u1EA1t \xEDt nh\u1EA5t 200 \u0111i\u1EC3m"
+    note: "\u0110\u1EA1t \xEDt nh\u1EA5t 100 \u0111i\u1EC3m"

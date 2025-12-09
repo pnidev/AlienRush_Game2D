@@ -16,6 +16,7 @@ MonoBehaviour:
   levelIndex: 2
   displayName: 'Map3 - L2: No Collision + Reach Score'
   requiresBoss: 0
+  bossSceneName: 
   tasks:
   - id: map3_l2_no_collision
     type: 11
@@ -23,5 +24,5 @@ MonoBehaviour:
     note: "Kh\xF4ng va ch\u1EA1m v\u1EADt c\u1EA3n trong l\u01B0\u1EE3t"
   - id: map3_l2_reach_score
     type: 2
-    target: 150
-    note: "\u0110\u1EA1t \xEDt nh\u1EA5t 250 \u0111i\u1EC3m"
+    target: 100
+    note: "\u0110\u1EA1t \xEDt nh\u1EA5t 100 \u0111i\u1EC3m"

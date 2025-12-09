@@ -117,36 +117,51 @@ public class Nhi_UIManagerInMap : MonoBehaviour
     // ===== EVENT HANDLERS =====
     void OnTaskProgressChanged(string id, int cur, int target)
     {
+        //if (taskText == null) return;
+
+        //string display = id;
+        //var cfg = LevelRuntimeManager.I?.GetCurrentLevelConfig();
+        //if (cfg != null && cfg.tasks != null)
+        //{
+        //    var t = cfg.tasks.FirstOrDefault(x => x.id == id);
+        //    if (t.id != null)
+        //        display = !string.IsNullOrEmpty(t.note) ? t.note : t.id;
+        //}
+
+        //taskText.text = $"{display}: {cur}/{target}";
+        //Debug.Log($"[UI] OnTaskProgressChanged -> {display}: {cur}/{target}");
         if (taskText == null) return;
 
-        string display = id;
-        var cfg = LevelRuntimeManager.I?.GetCurrentLevelConfig();
-        if (cfg != null && cfg.tasks != null)
-        {
-            var t = cfg.tasks.FirstOrDefault(x => x.id == id);
-            if (t.id != null)
-                display = !string.IsNullOrEmpty(t.note) ? t.note : t.id;
-        }
+        // Thay vì chỉ in 1 dòng (ghi đè), ta refresh toàn bộ UI
+        RefreshAllTasksUI();
 
-        taskText.text = $"{display}: {cur}/{target}";
-        Debug.Log($"[UI] OnTaskProgressChanged -> {display}: {cur}/{target}");
+        Debug.Log($"[UI] OnTaskProgressChanged -> {id}: {cur}/{target} (refreshed all tasks)");
     }
 
     void OnTaskCompleted(string id)
     {
+        //if (taskText == null) return;
+
+        //string display = id;
+        //var cfg = LevelRuntimeManager.I?.GetCurrentLevelConfig();
+        //if (cfg != null && cfg.tasks != null)
+        //{
+        //    var t = cfg.tasks.FirstOrDefault(x => x.id == id);
+        //    if (t.id != null)
+        //        display = !string.IsNullOrEmpty(t.note) ? t.note : t.id;
+        //}
+        //taskText.text = $"{display} - Completed";
+        //UpdateBestScore();
+        //Debug.Log($"[UI] OnTaskCompleted -> {display} completed");
         if (taskText == null) return;
 
-        string display = id;
-        var cfg = LevelRuntimeManager.I?.GetCurrentLevelConfig();
-        if (cfg != null && cfg.tasks != null)
-        {
-            var t = cfg.tasks.FirstOrDefault(x => x.id == id);
-            if (t.id != null)
-                display = !string.IsNullOrEmpty(t.note) ? t.note : t.id;
-        }
-        taskText.text = $"{display} - Completed";
+        // Khi task hoàn thành, cũng refresh toàn bộ UI để hiện đủ các task + trạng thái mới
+        RefreshAllTasksUI();
+
+        // update best score
         UpdateBestScore();
-        Debug.Log($"[UI] OnTaskCompleted -> {display} completed");
+
+        Debug.Log($"[UI] OnTaskCompleted -> {id} completed (refreshed all tasks)");
     }
 
     void OnLevelStarted(int map, int level)
@@ -208,6 +223,6 @@ public class Nhi_UIManagerInMap : MonoBehaviour
 
         int map = LevelRuntimeManager.I.GetMapIndex();
         int best = GameSave.GetBestScoreForMap(map);
-        bestScoreText.text = $"Best (Map {map}): {best}";
+        bestScoreText.text = $"HighestScore: {best}";
     }
 }

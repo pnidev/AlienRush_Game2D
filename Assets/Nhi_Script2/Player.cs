@@ -39,11 +39,11 @@ public class NewBehaviourScript : MonoBehaviour
         rb.velocity = playerInput.normalized * moveSpeed;
         if (playerInput.x < 0)
         {
-            spriteRenderer.flipX = true;
+            spriteRenderer.flipX = false;
         }
         else if (playerInput.x > 0)
         {
-            spriteRenderer.flipX = false;
+            spriteRenderer.flipX = true;
         }
         if (playerInput != Vector2.zero)
         {

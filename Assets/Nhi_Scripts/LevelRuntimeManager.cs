@@ -60,6 +60,16 @@ public class LevelRuntimeManager : MonoBehaviour
     // ============================================================
     // INIT
     // ============================================================
+    // MapIndex = 1 → FightingBoss1
+    // MapIndex = 2 → FightingBoss2
+    // MapIndex = 3 → FightingBoss3
+    public string[] fallbackBossSceneByMap = new string[]
+    {
+    "boss_1_officeq",  // Map 1
+    "FightingBoss2",  // Map 2
+    "FightingBoss3"   // Map 3
+    };
+
     void Awake()
     {
         if (Time.timeScale == 0f) Time.timeScale = 1f;
@@ -614,11 +624,11 @@ public class LevelRuntimeManager : MonoBehaviour
         // Hoàn tất level (ghi điểm, mark level complete)
         CompleteLevel(); // sẽ gọi EndCurrentRun(true) bên trong
 
-        // Thay vì quay lại gameplay, ta load MapSelectScene
-        string mapSelectScene = "MapSelectScene"; // <- đổi tên nếu scene của bạn khác
-        Debug.Log($"[LRM] Boss defeated -> returning to {mapSelectScene} (level already completed).");
+        //// Thay vì quay lại gameplay, ta load MapSelectScene
+        //string mapSelectScene = "MapSelectScene"; // <- đổi tên nếu scene của bạn khác
+        //Debug.Log($"[LRM] Boss defeated -> returning to {mapSelectScene} (level already completed).");
 
-        StartCoroutine(ReturnToMapSelectCoroutine(mapSelectScene));
+        //StartCoroutine(ReturnToMapSelectCoroutine(mapSelectScene));
     }
 
 
@@ -699,10 +709,30 @@ public class LevelRuntimeManager : MonoBehaviour
             return;
         }
 
-        // Lấy tên scene boss từ config nếu có, fallback theo map index
-        bossSceneToLoad = !string.IsNullOrEmpty(currentLevelConfig.bossSceneName)
-                            ? currentLevelConfig.bossSceneName
-                            : $"FightingBoss{mapConfig.mapIndex}";
+        // Ưu tiên bossSceneName nếu LevelConfig_SO có khai báo
+        if (!string.IsNullOrEmpty(currentLevelConfig.bossSceneName))
+        {
+            bossSceneToLoad = currentLevelConfig.bossSceneName;
+        }
+        else
+        {
+            // Nếu không có bossSceneName → fallback theo mapIndex
+            int idx = mapConfig.mapIndex - 1; // Map 1 → index 0
+
+            if (fallbackBossSceneByMap != null &&
+                idx >= 0 && idx < fallbackBossSceneByMap.Length)
+            {
+                bossSceneToLoad = fallbackBossSceneByMap[idx];
+            }
+            else
+            {
+                // 3. Không còn fallback kiểu FightingBoss{map} nữa
+                Debug.LogError($"[LRM] Không tìm được boss scene cho mapIndex={mapConfig.mapIndex}. Kiểm tra bossSceneName hoặc fallbackBossSceneByMap.");
+                return;
+            }
+        }
+
+        Debug.Log("[LRM] Boss scene selected = " + bossSceneToLoad);
 
         // Lưu scene hiện tại để có thể quay lại nếu cần (không dùng trong flow hiện tại)
         bossReturnScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
@@ -759,6 +789,12 @@ public class LevelRuntimeManager : MonoBehaviour
 
         return (0, 0);
     }
+    public void GoToMapSelect()
+    {
+        Time.timeScale = 1f;   // Bỏ pause UI thắng
+        SceneManager.LoadScene("MapSelectScene");
+    }
+
     // Thêm vào cuối class LevelRuntimeManager
     public void EndCurrentRun(bool forceComplete = false)
     {
@@ -766,13 +802,28 @@ public class LevelRuntimeManager : MonoBehaviour
 
         int runScore = Nhi_ScoreManager.I != null ? Nhi_ScoreManager.I.CurrentRunScore : 0;
 
-        
         // Luôn cộng runScore vào tổng tích lũy, dù complete hay không
         GameSave.AddRunScore(mapConfig.mapIndex, runScore);
 
-        
-
         Debug.Log($"[LRM] EndCurrentRun - Added runScore {runScore} to cumulative totals (forceComplete={forceComplete})");
+
+        // --- NEW: ensure per-user best is committed (so leaderboard picks it up) ---
+        try
+        {
+            if (Nhi_ScoreManager.I != null)
+            {
+                Nhi_ScoreManager.I.CommitRunScore();
+                Debug.Log("[LRM] Called Nhi_ScoreManager.I.CommitRunScore()");
+            }
+            else
+            {
+                Debug.LogWarning("[LRM] Nhi_ScoreManager.I is null - cannot commit per-user best score.");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning("[LRM] Exception when calling CommitRunScore: " + ex.Message);
+        }
 
         // Nếu là complete thật sự thì vẫn mark complete như cũ
         if (forceComplete)
@@ -781,6 +832,7 @@ public class LevelRuntimeManager : MonoBehaviour
             OnLevelCompletedEvent?.Invoke(mapConfig.mapIndex, currentLevelIndex);
         }
     }
+
     public LevelConfig_SO GetCurrentLevelConfig() => currentLevelConfig;
 
     public int GetCurrentLevelIndex() => currentLevelIndex;

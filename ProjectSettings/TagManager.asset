@@ -8,6 +8,10 @@ TagManager:
   - Coin
   - Dashable
   - Undashable
+  - Obstacle
+  - EnemyBullet
+  - PlayerBullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -15,7 +19,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 
@@ -45,15 +49,42 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: map
-    uniqueID: 4241700821
-    locked: 0
   - name: highlight
     uniqueID: 3540352767
     locked: 0
   - name: item
     uniqueID: 1706234313
     locked: 0
+  - name: ground
+    uniqueID: 3833442549
+    locked: 0
+  - name: grass
+    uniqueID: 4102485095
+    locked: 0
+  - name: fence
+    uniqueID: 526669541
+    locked: 0
+  - name: tree
+    uniqueID: 2413631179
+    locked: 0
+  - name: rock
+    uniqueID: 3578128527
+    locked: 0
+  - name: chest
+    uniqueID: 1408960297
+    locked: 0
+  - name: map
+    uniqueID: 4241700821
+    locked: 0
+  - name: enemy
+    uniqueID: 444715911
+    locked: 0
   - name: player
     uniqueID: 3429176181
+    locked: 0
+  - name: bullet
+    uniqueID: 583127259
+    locked: 0
+  - name: effec
+    uniqueID: 3152290759
     locked: 0

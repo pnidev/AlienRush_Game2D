@@ -83,7 +83,16 @@ public class DeathUI : MonoBehaviour
             Debug.Log("SpendCoins failed.");
             return;
         }
-
+        // --- Báo cho LRM là đã mua sau khi chết (increment BuyAfterDieCount) ---
+        if (LevelRuntimeManager.I != null)
+        {
+            LevelRuntimeManager.I.AddProgressByType(TaskType.BuyAfterDieCount, 1);
+            Debug.Log("[DeathUI] Reported BuyAfterDieCount +1 to LRM.");
+        }
+        else
+        {
+            Debug.LogWarning("[DeathUI] LevelRuntimeManager.I is null — cannot report BuyAfterDieCount now.");
+        }
 
         player.ReviveWithOneLife();
 
